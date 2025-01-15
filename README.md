@@ -1,5 +1,6 @@
 # ALS_pretraining
 
+code coming soon.
 
 ## Installation
 The code has been tested with Ubuntu 24.04.1, python 3.10, CUDA 12.1.1
