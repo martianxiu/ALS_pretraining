@@ -7,7 +7,7 @@ The pre-training and fine-tuning paradigm has revolutionized satellite remote se
 You can download the technical report from [arXiv](https://arxiv.org/abs/2501.05095).
 
 ## Installation
-The code has been tested with Ubuntu 24.04.1, python 3.10, CUDA 12.1.1
+The code has been tested with python 3.10, pytorch 2.3.1, and CUDA 12.1.1
 
 We use conda to create a virtual environment. 
 ```
@@ -17,12 +17,13 @@ conda activate als
 
 Install pytorch:
 ```
-pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+pip install torch==2.3.1 torchvision==0.18.1 torchaudio==2.3.1 --index-url https://download.pytorch.org/whl/cu121
 ```
 
 Install pcdet 
 ```
 conda install -c conda-forge gcc=10 gxx_linux-64=10
+pip3 install ninja
 python setup.py develop
 ```
 
@@ -33,11 +34,13 @@ pip3 install transformers
 pip3 install kornia 
 pip3 install matplotlib  
 pip3 install opencv-python
-pip3 install torch_scatter
+pip3 install torch-scatter -f https://data.pyg.org/whl/torch-2.3.1+cu121.html
 pip3 install scikit-learn
 pip3 install pyransac3d
 pip3 install laspy
 pip3 install psutil
 pip3 install lazrs
 pip3 install gpustat
+pip3 install gdown
+pip3 install numpy==1.26.4
 ```
