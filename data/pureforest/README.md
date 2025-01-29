@@ -1,4 +1,4 @@
-# Prepare DALES dataset
+# Prepare PureForest dataset
 ## download 
 ```
 cd script
