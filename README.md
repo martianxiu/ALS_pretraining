@@ -44,3 +44,42 @@ pip3 install gpustat
 pip3 install gdown
 pip3 install numpy==1.26.4
 ```
+## Dataset preparation
+Please see the readme in each dataset folder. For example, for DALES dataset see data/dales/
+
+## Train and test
+
+```
+cd tools
+```
+
+Modify the JOB_NAME and TASK_ID of the run_train_eval.sh
+JOB_NAME corresponds to the name of config file in tools/cfgs/${dataset}_model/
+
+TASK_ID is an ID assigned to the experiment.
+
+Then, the following script will run the train and test. 
+```
+sh run_train_eval.sh
+```
+
+## Pre-trained models
+coming soon ... 
+
+## Acknowledement 
+This repo is based on 
+[OpenPCDet](https://github.com/open-mmlab/OpenPCDet) and [BEV-MAE](https://github.com/VDIGPKU/BEV-MAE). 
+
+## Citation
+If you find our work useful in your research, please consider citing:
+```
+@misc{xiu2025advancingalsapplicationslargescale,
+      title={Advancing ALS Applications with Large-Scale Pre-training: Dataset Development and Downstream Assessment}, 
+      author={Haoyi Xiu and Xin Liu and Taehoon Kim and Kyoung-Sook Kim},
+      year={2025},
+      eprint={2501.05095},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2501.05095}, 
+}
+```
