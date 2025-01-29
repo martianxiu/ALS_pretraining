@@ -124,7 +124,7 @@ MODEL:
         CLS_FC: [16, 16]
 
 OPTIMIZATION: # optimizer and scheduler config
-    BATCH_SIZE_PER_GPU: 2 # default 4. V-node ok 
+    BATCH_SIZE_PER_GPU: 12 # default 4. V-node ok 
     # BATCH_SIZE_PER_GPU: 2 # debug
     NUM_EPOCHS: 50
 
@@ -144,3 +144,4 @@ OPTIMIZATION: # optimizer and scheduler config
     WARMUP_EPOCH: 1
 
     GRAD_NORM_CLIP: 10
+    USE_AMP: True

@@ -27,6 +27,8 @@ def train_one_epoch(model, optimizer, train_loader, model_func, lr_scheduler, ac
                     rank, tbar, total_it_each_epoch, dataloader_iter, tb_log=None, leave_pbar=False, 
                     use_logger_to_record=False, logger=None, logger_iter_interval=10, cur_epoch=None, 
                     total_epochs=None, ckpt_save_dir=None, ckpt_save_time_interval=300, show_gpu_stat=True, use_amp=False):
+    
+
     if total_it_each_epoch == len(train_loader):
         dataloader_iter = iter(train_loader)
 
@@ -43,6 +45,8 @@ def train_one_epoch(model, optimizer, train_loader, model_func, lr_scheduler, ac
         losses_m = common_utils.AverageMeter()
 
     end = time.time()
+
+
     for cur_it in range(start_it, total_it_each_epoch):
         try:
             batch = next(dataloader_iter)
@@ -69,72 +73,13 @@ def train_one_epoch(model, optimizer, train_loader, model_func, lr_scheduler, ac
         model.train()
         
         optimizer.zero_grad()
-
-        # import pdb; pdb.set_trace()
+        
 
         with torch.cuda.amp.autocast(enabled=use_amp):
             loss, tb_dict, disp_dict = model_func(model, batch)
 
         scaler.scale(loss).backward()
         scaler.unscale_(optimizer)
-        clip_grad_norm_(model.parameters(), optim_cfg.GRAD_NORM_CLIP)
-
-        # ##### check if NaN or Inf
-        # # Check for NaN or Inf in the gradient
-        # found_nan_or_inf = torch.tensor([0], device='cuda')
-        # nan_detected = torch.tensor([0], device='cuda')
-        # inf_detected = torch.tensor([0], device='cuda')
-
-        # for name, param in model.named_parameters():
-        #     if param.grad is not None:
-        #         if torch.isnan(param.grad).any():  # Checks for NaN
-        #             found_nan_or_inf.fill_(1)
-        #             nan_detected.fill_(1)
-        #             logger.info(f"NaN detected in gradients of layer: {name}")
-        #             break
-        #         elif torch.isinf(param.grad).any():  # Checks for Inf
-        #             found_nan_or_inf.fill_(1)
-        #             inf_detected.fill_(1)
-        #             logger.info(f"Inf detected in gradients of layer: {name}")
-        #             break
-
-        # # Synchronize across all processes to determine if any process found NaN/Inf
-        # if torch.distributed.is_initialized():
-        #     dist.all_reduce(found_nan_or_inf, op=dist.ReduceOp.SUM)
-        #     dist.all_reduce(nan_detected, op=dist.ReduceOp.SUM)
-        #     dist.all_reduce(inf_detected, op=dist.ReduceOp.SUM)
-
-        # if found_nan_or_inf.item() > 0:
-        #     # Each device saves its batch if NaN or Inf is detected and ignore this iteration by setting grad to zero.
-        #     logger.info(f"Found error NaN or Inf")
-        #     current_time = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-            
-        #     if nan_detected.item() == 1:
-        #         logger.info("NaN was detected.")
-        #     elif inf_detected.item() == 1:
-        #         logger.info("Inf was detected.")
-        #     if torch.distributed.is_initialized():
-        #         rank = dist.get_rank()
-        #     else: 
-        #         rank = 0
-            
-        #     # check loss 
-        #     # logger.info(f"[device: {dist.get_rank()}], if NaN or Inf: {check_for_nan_inf(loss)}")
-        #     folder = f'error_data/{current_time}'
-        #     if not exists(folder):
-        #         try:
-        #             os.makedirs(folder)
-        #         except FileExistsError as e:
-        #             pass
-        #     filename = join(folder, f"problematic_batch_rank_{rank}.pth")    
-        #     # filename = f'error_data/{current_time}/problematic_batch_rank_{dist.get_rank()}.pth'         
-        #     save_batch(batch, loss, filename)
-        #     optimizer.zero_grad()
-        # else:  
-        #     scaler.step(optimizer)
-        #     scaler.update()
-        ###
-
         clip_grad_norm_(model.parameters(), optim_cfg.GRAD_NORM_CLIP)
         scaler.step(optimizer)
         scaler.update()
@@ -401,13 +346,15 @@ def train_val_model(model, optimizer, train_loader, val_loader, model_func, lr_s
     logger.info(f"Best score to be optimized: {target_best_score_name}")
     best_score = 0
     
-
+    # Floating point exception
     with tqdm.trange(start_epoch, total_epochs, desc='epochs', dynamic_ncols=True, leave=(rank == 0)) as tbar:
         total_it_each_epoch = len(train_loader)
         if merge_all_iters_to_one_epoch:
             assert hasattr(train_loader.dataset, 'merge_all_iters_to_one_epoch')
             train_loader.dataset.merge_all_iters_to_one_epoch(merge=True, epochs=total_epochs)
             total_it_each_epoch = len(train_loader) // max(total_epochs, 1)
+        
+        
 
         dataloader_iter = iter(train_loader)
         for cur_epoch in tbar:
@@ -420,6 +367,7 @@ def train_val_model(model, optimizer, train_loader, val_loader, model_func, lr_s
             else:
                 cur_scheduler = lr_scheduler
             
+
             augment_disable_flag = disable_augmentation_hook(hook_config, dataloader_iter, total_epochs, cur_epoch, cfg, augment_disable_flag, logger)
             accumulated_iter = train_one_epoch(
                 model, optimizer, train_loader, model_func,

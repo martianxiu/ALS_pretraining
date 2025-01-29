@@ -4,12 +4,15 @@ from .segmentor3d_template_bev_mae import Segmenter3DTemplateBEVMAE
 class BEV_MAE_UNet(Segmenter3DTemplateBEVMAE):
     def __init__(self, model_cfg, num_class, dataset):
         super().__init__(model_cfg=model_cfg, num_class=num_class, dataset=dataset)
+        
         self.module_list = self.build_networks()
+        
 
     def forward(self, batch_dict):
+        
         for cur_module in self.module_list:
             batch_dict = cur_module(batch_dict)
-
+        
         if self.training:
             loss, tb_dict, disp_dict = self.get_training_loss()
             iou_dict = self.get_scores(batch_dict) # "intersection", "union", "target", "batch_mIoU"

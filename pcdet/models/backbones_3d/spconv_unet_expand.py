@@ -581,6 +581,7 @@ class VoxelResBackBone8xUNet_expand(nn.Module):
         # batch_dict['encoded_spconv_tensor'] = out
         # batch_dict['encoded_spconv_tensor_stride'] = 8
 
+
         # for segmentation head
         x_up5 = self.UR_block_forward(out, out, self.conv_up_t5, self.conv_up_m5, self.inv_conv5)
         # [400, 352, 11] <- [200, 176, 5]
@@ -592,10 +593,14 @@ class VoxelResBackBone8xUNet_expand(nn.Module):
         # [1600, 1408, 41] <- [1600, 1408, 41]
         x_up1 = self.UR_block_forward(x_conv1, x_up2, self.conv_up_t1, self.conv_up_m1, self.conv5)
 
+        
+
         batch_dict['point_features'] = x_up1.features
         point_coords = common_utils.get_voxel_centers(
             x_up1.indices[:, 1:], downsample_times=1, voxel_size=self.voxel_size,
             point_cloud_range=self.point_cloud_range
         )
         batch_dict['point_coords'] = torch.cat((x_up1.indices[:, 0:1].float(), point_coords), dim=1)
+
+        
         return batch_dict

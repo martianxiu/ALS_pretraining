@@ -9,39 +9,16 @@ from .dataset_als_bevmae_template import DatasetTemplate as DatasetTemplateALSBE
 from .als.als_bevmae_dataset import ALSBEVMAEDataset
 
 from .dataset_bevmae import DatasetTemplate as DatasetTemplateBEVMAE
-from .waymo.waymo_dataset_bevmae import WaymoDataset as WaymoDatasetBEVMAE
 from .dales.dales_dataset import DALESDataset
-from .opengf.opengf_dataset import OpenGFDataset
 from .pureforest.pureforest_dataset import PureForestDataset
 from .opengfcls.opengfcls_dataset import OpenGFClsDataset
-# from .dataset import DatasetTemplate
-
-# # from .kitti.kitti_dataset import KittiDataset
-# # from .nuscenes.nuscenes_dataset import NuScenesDataset
-from .waymo.waymo_dataset import WaymoDataset
-
-# # from .pandaset.pandaset_dataset import PandasetDataset
-# # from .lyft.lyft_dataset import LyftDataset
-# # from .once.once_dataset import ONCEDataset
-# # from .argo2.argo2_dataset import Argo2Dataset
-# from .custom.custom_dataset import CustomDataset
 
 __all__ = {
-    # 'DatasetTemplate': DatasetTemplate,
     'DatasetTemplateBEVMAE': DatasetTemplateBEVMAE,
-    # # 'KittiDataset': KittiDataset,
-    # # 'NuScenesDataset': NuScenesDataset,
-    'WaymoDataset': WaymoDataset,
-    'WaymoDatasetBEVMAE': WaymoDatasetBEVMAE,
-    # # 'PandasetDataset': PandasetDataset,
-    # # 'LyftDataset': LyftDataset,
-    # # 'ONCEDataset': ONCEDataset,
-    # 'CustomDataset': CustomDataset,
-    # # 'Argo2Dataset': Argo2Dataset
+    
     'DatasetTemplateALSBEVMAE': DatasetTemplateALSBEVMAE,
     'ALSBEVMAEDataset': ALSBEVMAEDataset,
     'DALESDataset': DALESDataset,
-    'OpenGFDataset': OpenGFDataset,
     'PureForestDataset': PureForestDataset,
     'OpenGFClsDataset': OpenGFClsDataset,
 }

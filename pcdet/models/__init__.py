@@ -38,7 +38,6 @@ def load_data_to_gpu(batch_dict):
 
 def model_fn_decorator_visualization():
     ModelReturn = namedtuple('ModelReturn', ['loss', 'tb_dict', 'disp_dict'])
-
     def model_func(model, batch_dict, vis_save_path=None):
         load_data_to_gpu(batch_dict)
         batch_dict['vis_save_path'] = vis_save_path
@@ -57,11 +56,9 @@ def model_fn_decorator_visualization():
 
 def model_fn_decorator():
     ModelReturn = namedtuple('ModelReturn', ['loss', 'tb_dict', 'disp_dict'])
-
     def model_func(model, batch_dict):
         load_data_to_gpu(batch_dict)
         ret_dict, tb_dict, disp_dict = model(batch_dict)
-        
         loss = ret_dict['loss'].mean()
         #TODO: it also updates in validation?
         if hasattr(model, 'update_global_step'):
