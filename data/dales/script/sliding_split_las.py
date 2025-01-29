@@ -78,6 +78,6 @@ def split_all_las_files(input_dir, output_dir, window_size):
 if __name__ == "__main__":
     # Specify input and output directories
     input_directory = "../test"
-    output_directory = "../val_144_tiles"
+    output_directory = "../val"
 
     split_all_las_files(input_directory, output_directory, window_size=144)
