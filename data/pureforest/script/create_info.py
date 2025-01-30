@@ -24,7 +24,7 @@ def create_info(split, tile_paths, root):
         # print(tp)
         index_start = tp.split('/').index(split)
         tile_idx = '/'.join(tp.split('/')[index_start+1:])
-        print(tile_idx)
+        # print(tile_idx)
         
         point_cloud = {
             'num_features': num_features,
