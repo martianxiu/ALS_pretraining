@@ -1,5 +1,5 @@
 ## BEV-MAE train 
-JOB_NAME=bevmae_vsize0.6_D2362W3_pureforest
+JOB_NAME=bevmae_vsize0.6_D2362W3_opengfcls
 TASK_ID=100
 
 set -x

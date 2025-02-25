@@ -12,7 +12,7 @@ CLASS_NAMES: [
 ]
 
 TARGET_BEST_SCORE_NAME: mIoU
-PRETRAINED_MODEL: /home/martianxiu/code/OpenPCDet/output/als_models/bevmae_pretrain_mask0.7_D2362W3_sample40_als/bevmae_pretrain_mask0.7_D2362W3_sample40_als_1/ckpt/latest_model.pth
+PRETRAINED_MODEL: 
 
 
 DATA_CONFIG:
@@ -20,7 +20,7 @@ DATA_CONFIG:
     IGNORE_INDEX: 255
     LOOP: 1 # def: 60
     # POINT_CLOUD_RANGE: [-72, -72, 0, 72, 72, 288] # pillar sampling (144m crop), voxel_size=0.6
-    POINT_CLOUD_RANGE: [-52.8, -52.8, 0, 52.8, 52.8, 288] # the datasets are 50m tiles 
+    POINT_CLOUD_RANGE: [-52.8, -52.8, 0, 52.8, 52.8, 288] # the datasets are 100m tiles 
     VOXEL_SIZE: 0.6
     INFO_LIMIT:  # percentage of training data 
     PRETRAIN_MODE: False
@@ -129,7 +129,7 @@ OPTIMIZATION: # optimizer and scheduler config
     LR: 0.005
     WEIGHT_DECAY: 0.01
     MOMENTUM: 0.9
-
+    
     MOMS: [0.95, 0.85]
     PCT_START: 0.1 # which epoch reaches the max initial lr. def: 0.4. 
     DIV_FACTOR: 10 # effective when LambdaLR 
