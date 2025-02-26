@@ -6,6 +6,8 @@ The pre-training and fine-tuning paradigm has revolutionized satellite remote se
 ## Paper
 The technical report is available on [arXiv](https://arxiv.org/abs/2501.05095).
 
+The code for the geospatial data sampling and dataset development is provided in [this repo](https://github.com/martianxiu/usgs_data_analysis/tree/main).
+
 ## Installation
 This code has been tested with Python 3.10, PyTorch 2.3.1, and CUDA 12.1.1.
 
@@ -54,9 +56,6 @@ sh run_train_eval.sh
 
 ## Pre-trained Models
 Coming soon...
-
-## Geospatial Data sampling and Dataset Development
-The geospatial data sampling and dataset development part of code is provided in [this repo](https://github.com/martianxiu/usgs_data_analysis/tree/main).
 
 ## Acknowledgment
 This repository is based on [OpenPCDet](https://github.com/open-mmlab/OpenPCDet) and [BEV-MAE](https://github.com/VDIGPKU/BEV-MAE).
