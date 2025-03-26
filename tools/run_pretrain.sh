@@ -1,5 +1,5 @@
 ## BEV-MAE train 
-JOB_NAME=bevmae_pretrain_mask0.7_D2362W3_sample10_als
+JOB_NAME=bevmae_pretrain_mask0.7_D2362W3_sample40_als
 TASK_ID=100
 
 set -x
