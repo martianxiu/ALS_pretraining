@@ -14,6 +14,5 @@ Please follow the instructions in the repository below to generate the dataset:
 
 ### 2. Organize the Data
 
-After generating the dataset, move or symlink **all folders that contain at least one `.laz` file** into the directory: processed_tiles_developed_forest_invalid_filtered
-
+After generating the dataset, move or symlink **all folders that contain at least one `.laz` file** into the processed_tiles_developed_forest_invalid_filtered
 
