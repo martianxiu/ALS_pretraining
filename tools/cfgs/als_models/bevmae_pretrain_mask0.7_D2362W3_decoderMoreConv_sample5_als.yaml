@@ -1,0 +1,118 @@
+# CLASS_NAMES: ['Vehicle', 'Pedestrian', 'Cyclist']
+CLASS_NAMES: []
+
+PRETRAINED_MODEL: 
+
+DATA_CONFIG:
+    _BASE_CONFIG_: cfgs/dataset_configs/als_dataset_bevmae.yaml
+    
+    PROCESSED_DATA_TAG: 'processed_tiles_developed_forest_invalid_filtered'
+    # PROCESSED_DATA_TAG: 'processed_tiles_developed_forest'
+    
+    DATA_SPLIT: {
+      'train': train_processed_tiles_developed_forest_invalid_filtered, # name of the text file in ImageSets folder
+      # 'train': train_processed_tiles_developed_forest, # name of the text file in ImageSets folder
+    }   
+    # point cloud must be devisable by voxel_size * downsamplign factor (8), integer.
+    # POINT_CLOUD_RANGE: [-132, -132, -1, 132, 132, 287] # pillar sampling (1/4), voxel_size=0.6
+    # POINT_CLOUD_RANGE: [-132, -132, 0, 132, 132, 288] # pillar sampling (1/4), voxel_size=0.6
+    POINT_CLOUD_RANGE: [-72, -72, 0, 72, 72, 288] # pillar sampling (144m crop), voxel_size=0.6
+    VOXEL_SIZE: 0.6
+    # POINT_CLOUD_RANGE: [-128, -128, 0, 128, 128, 288] # pillar sampling (1/4), voxel_size=0.8
+    # VOXEL_SIZE: 0.8
+
+    # number of samples per region defined by info pikcle files
+    NUM_SAMPLE_PER_REGION: 5
+    # NUM_SAMPLE_PER_REGION: 10 
+    # NUM_SAMPLE_PER_REGION: 20 
+    # NUM_SAMPLE_PER_REGION: 100 
+    
+    USE_LOCAL_STORAGE: False
+    LOCAL_STORAGE_PATH: SGE_ARDIR
+    LOCAL_STORAGE_FILE_LIMIT: 7500
+    
+    USE_SHARED_MEMORY: False
+    SHARED_MEMORY_FILE_LIMIT: 1500
+    
+    DATA_PROCESSOR:
+        - NAME: percentile_clip_z
+          PERCENTILE_HIGH: 99.9
+          PERCENTILE_LOW: 0.1
+
+        - NAME: shuffle_points
+          SHUFFLE_ENABLED: {
+            'train': True,
+            'test': True
+          }
+        
+        - NAME: pillar_crop # crop a block. 
+          PILLAR_SIZE: 144
+          GRID_SIZE_2D: 10
+
+        - NAME: transform_points_to_voxels_PointToVoxel_with_BEV 
+          VOXEL_SIZE: [0.6, 0.6, 0.6] # follows pre-training 
+          MAX_POINTS_PER_VOXEL: 5
+          MAX_NUMBER_OF_VOXELS: {
+            'train': 200000,
+            'val': 200000,
+            'test': 15000000
+          }
+          VOXEL_SIZE_BEV: [4.8, 4.8, 288] # voxel size = 0.6
+          MAX_POINTS_PER_VOXEL_BEV: 30
+          MAX_NUMBER_OF_VOXELS_BEV: {
+            'train': 200000,
+            'test': 200000
+          }
+
+
+MODEL:
+    NAME: BEV_MAE
+
+    VFE:
+        NAME: MeanVFE
+
+    BACKBONE_3D:
+        NAME: BEV_MAE_res_expand_no_density_decoder_more_conv # bev relative height reconstruction 
+        WIDTH_MUL: 3 # input_dim = 16 * WIDTH_MUL
+        NUM_BLOCKS: [2,3,6,2] # default: [2,2,2,2]
+        MASKED_RATIO: 0.7 
+        GRID: 1
+        VOXEL_SIZE: [4.8, 4.8, 288] # equivalent to BEV voxel size. see dataset config
+        # POINT_CLOUD_RANGE: [-132, -132, -1, 132, 132, 287] # when voxel size = 0.6
+        # POINT_CLOUD_RANGE: [-132, -132, 0, 132, 132, 288]
+        POINT_CLOUD_RANGE: [-72, -72, 0, 72, 72, 288] # pillar sampling (144m crop), voxel_size=0.6
+    
+    # BACKBONE_3D:
+    #     NAME: BEV_MAE_res
+    #     MASKED_RATIO: 0.7 
+    #     GRID: 1
+    #     VOXEL_SIZE: [4.8, 4.8, 288] # equivalent to BEV voxel size. see dataset config
+    #     POINT_CLOUD_RANGE: [-132, -132, -1, 132, 132, 287] # when voxel size = 0.6
+          
+
+
+OPTIMIZATION: # optimizer and scheduler config
+    BATCH_SIZE_PER_GPU: 2 # default 16. A-node. 
+    NUM_EPOCHS: 50
+
+    # OPTIMIZER: adam_onecycle
+    OPTIMIZER: adamW_onecycle
+    # OPTIMIZER: adamW_cosineanneal
+    # LR: 0.0003 # default
+    # LR: 0.001
+    LR: 0.01 # the one I set.
+    WEIGHT_DECAY: 0.01 # default
+    # WEIGHT_DECAY: 0.5 #
+    MOMENTUM: 0.9
+
+    MOMS: [0.95, 0.85]
+    PCT_START: 0.1 #default: 0.4
+    DIV_FACTOR: 10
+    DECAY_STEP_LIST: [35, 45]
+    LR_DECAY: 0.1
+    LR_CLIP: 0.0000001
+
+    LR_WARMUP: False
+    WARMUP_EPOCH: 1
+
+    GRAD_NORM_CLIP: 10
